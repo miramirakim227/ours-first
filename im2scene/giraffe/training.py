@@ -44,7 +44,7 @@ class Trainer(BaseTrainer):
         self.fid_dict = fid_dict
         self.n_eval_iterations = n_eval_iterations
 
-        self.vis_dict = model.generator.get_vis_dict(16)
+        self.vis_dict = model.generator.get_vis_dict()
 
         if multi_gpu:
             self.generator = torch.nn.DataParallel(self.model.generator)
@@ -190,8 +190,8 @@ class Trainer(BaseTrainer):
             gen = self.model.generator
         gen.eval()
         with torch.no_grad():
-            image_fake = self.generator(**self.vis_dict, mode='val').cpu()
-
+            # 엥 왜 여기는 gen 아니고 self.generator임?
+            image_fake = gen(**self.vis_dict, mode='val').cpu()
         if self.overwrite_visualization:
             out_file_name = 'visualization.png'
         else:
@@ -199,4 +199,5 @@ class Trainer(BaseTrainer):
 
         image_grid = make_grid(image_fake.clamp_(0., 1.), nrow=4)
         save_image(image_grid, os.path.join(self.vis_dir, out_file_name))
+        gen.train()
         return image_grid

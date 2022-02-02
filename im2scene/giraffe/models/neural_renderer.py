@@ -76,7 +76,6 @@ class NeuralRenderer(nn.Module):
         self.actvn = nn.LeakyReLU(0.2, inplace=True)
 
     def forward(self, x):
-
         net = self.conv_in(x)
 
         if self.use_rgb_skip:

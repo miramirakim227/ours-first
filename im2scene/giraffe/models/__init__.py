@@ -1,6 +1,6 @@
 import torch.nn as nn
 from im2scene.giraffe.models import (
-    decoder, generator, bounding_box_generator, neural_renderer)
+    decoder, generator, neural_renderer)
 
 
 # Dictionaries
@@ -10,14 +10,6 @@ decoder_dict = {
 
 generator_dict = {
     'simple': generator.Generator,
-}
-
-background_generator_dict = {
-    'simple': decoder.Decoder,
-}
-
-bounding_box_generator_dict = {
-    'simple': bounding_box_generator.BoundingBoxGenerator,
 }
 
 neural_renderer_dict = {

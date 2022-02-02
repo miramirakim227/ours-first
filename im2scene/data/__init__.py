@@ -1,8 +1,7 @@
 
 from im2scene.data.datasets import (
-    LSUNClass, ImagesDataset)
+    ImagesDataset)
 
 __all__ = [
-    LSUNClass,
     ImagesDataset,
 ]

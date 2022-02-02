@@ -1,13 +1,12 @@
 import yaml
 from im2scene import data
-from im2scene import gan2d, giraffe
+from im2scene import giraffe
 import logging
 import os
 
 
 # method directory; for this project we only use giraffe
 method_dict = {
-    'gan2d': gan2d,
     'giraffe': giraffe,
 }
 
@@ -138,16 +137,10 @@ def get_dataset(cfg, **kwargs):
     categories = cfg['data']['classes']
     img_size = cfg['data']['img_size']
 
-    if dataset_name == 'lsun':
-        dataset = data.LSUNClass(dataset_folder, categories, size=img_size,
-                                 random_crop=cfg['data']['random_crop'],
-                                 use_tanh_range=cfg['data']['use_tanh_range'],
-                                 )
-    else:
-        dataset = data.ImagesDataset(
-            dataset_folder, size=img_size,
-            use_tanh_range=cfg['data']['use_tanh_range'],
-            celebA_center_crop=cfg['data']['celebA_center_crop'],
-            random_crop=cfg['data']['random_crop'],
-        )
+    dataset = data.ImagesDataset(
+        dataset_folder, size=img_size,
+        use_tanh_range=cfg['data']['use_tanh_range'],
+        celebA_center_crop=cfg['data']['celebA_center_crop'],
+        random_crop=cfg['data']['random_crop'],
+    )
     return dataset

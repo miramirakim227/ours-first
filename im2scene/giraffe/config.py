@@ -16,37 +16,24 @@ def get_model(cfg, device=None, len_dataset=0, **kwargs):
     decoder = cfg['model']['decoder']
     discriminator = cfg['model']['discriminator']
     generator = cfg['model']['generator']
-    background_generator = cfg['model']['background_generator']
     decoder_kwargs = cfg['model']['decoder_kwargs']
     discriminator_kwargs = cfg['model']['discriminator_kwargs']
     generator_kwargs = cfg['model']['generator_kwargs']
-    background_generator_kwargs = \
-        cfg['model']['background_generator_kwargs']
-    bounding_box_generator = cfg['model']['bounding_box_generator']
-    bounding_box_generator_kwargs = \
-        cfg['model']['bounding_box_generator_kwargs']
     neural_renderer = cfg['model']['neural_renderer']
     neural_renderer_kwargs = cfg['model']['neural_renderer_kwargs']
     z_dim = cfg['model']['z_dim']
-    z_dim_bg = cfg['model']['z_dim_bg']
     img_size = cfg['data']['img_size']
+    range_u = cfg['training']['range_u']
+    range_v = cfg['training']['range_v']
+    batch_size = cfg['training']['batch_size']
 
     # Load always the decoder
     decoder = models.decoder_dict[decoder](
         z_dim=z_dim, **decoder_kwargs
     )
-
     if discriminator is not None:
         discriminator = discriminator_dict[discriminator](
             img_size=img_size, **discriminator_kwargs)
-    if background_generator is not None:
-        background_generator = \
-            models.background_generator_dict[background_generator](
-                z_dim=z_dim_bg, **background_generator_kwargs)
-    if bounding_box_generator is not None:
-        bounding_box_generator = \
-            models.bounding_box_generator_dict[bounding_box_generator](
-                z_dim=z_dim, **bounding_box_generator_kwargs)
     if neural_renderer is not None:
         neural_renderer = models.neural_renderer_dict[neural_renderer](
             z_dim=z_dim, img_size=img_size, **neural_renderer_kwargs
@@ -54,9 +41,7 @@ def get_model(cfg, device=None, len_dataset=0, **kwargs):
 
     if generator is not None:
         generator = models.generator_dict[generator](
-            device, z_dim=z_dim, z_dim_bg=z_dim_bg, decoder=decoder,
-            background_generator=background_generator,
-            bounding_box_generator=bounding_box_generator,
+            device, batch_size=batch_size, z_dim=z_dim, decoder=decoder, range_u=range_u, range_v=range_v,
             neural_renderer=neural_renderer, **generator_kwargs)
 
     if cfg['test']['take_generator_average']:
